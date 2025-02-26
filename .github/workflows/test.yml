@@ -50,6 +50,6 @@ jobs:
       - name: 上传镜像（Image需要手动替换到刷入包）
         uses: actions/upload-artifact@v4
         with:
-          name: Image.zip
+          name: Image
           path: |
             src/*
