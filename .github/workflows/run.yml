@@ -80,20 +80,20 @@ jobs:
         run: |
           cd work && ./kernel_platform/oplus/build/oplus_build_kernel.sh pineapple gki
           
+      - name: 整合资源
+        run: |
+          mkdir -p src
+          cp ./work/out/dist/Image ./src/
+          cp ./work/out/dist/Image.gz ./src/
+          cp ./work/out/dist/Image.lz4 ./src/
+          cp ./work/out/dist/boot.img ./src/
+          cp ./work/out/dist/boot-gz.img ./src/
+          cp ./work/out/dist/boot-lz4.img ./src/
 
-      - name: 上传Image镜像（需要手动替换到刷入包）
+      - name: 上传镜像（Image需要手动替换到刷入包）
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.m }}-Image.zip
           path: |
-            work/out/dist/Image
-            work/out/dist/Image.gz
-            work/out/dist/Image.lz4
-      - name: 上传boot.img
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ inputs.m }}-boot.zip
-          path: |
-            work/out/dist/boot.img
-            work/out/dist/boot-gz.img
-            work/out/dist/boot-lz4.img
+            src/*
+
