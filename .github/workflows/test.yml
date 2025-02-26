@@ -1,7 +1,7 @@
-name: 工作流例子
+name: 工作流例子1
 run-name: ${{ github.actor }} 正在测试 GitHub Actions 🚀
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
     #   phone:
     #     description: '选择手机型号：'
@@ -36,4 +36,4 @@ jobs:
     #   MODEL: ${{ inputs.phone == '小米10' && 'Mi10' || 'MI10PRO' }} 
     steps:
       - run: echo "🎉 该任务自动触发于 ${{ github.event_name }} 事件."
-      - run: echo "${{inputs.m}}-${{inputs.gki}}"
+      - run: echo "${{ inputs.m }}-${{ inputs.gki }}"
