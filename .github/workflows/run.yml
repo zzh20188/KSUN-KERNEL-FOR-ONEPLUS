@@ -1,0 +1,99 @@
+name: 工作流例子1
+run-name: ${{ github.actor }} 正在测试 GitHub Actions 🚀
+permissions:
+  contents: write  # Allow writing to repository contents (for pushing tags)
+  actions: write   # Allows triggering actions
+on:
+  workflow_call:
+    inputs:
+    #   phone:
+    #     description: '选择手机型号：'
+    #     required: true
+    #     default: '小米10'
+    #     type: choice
+    #     options:
+    #       - 小米10
+    #       - 小米10pro
+    #   susfs:
+    #     description: '是否集成SUSFS'
+    #     required: true
+    #     type: boolean
+    #   version:
+    #     description: '自定义版本名（如perf-xxx）/可为空（则为n0kernel）'
+    #     required: false
+    #     type: string
+      m:
+        required: false
+        type: string
+      gki:
+        required: false
+        type: string
+      model:
+        required: false
+        type: string     
+jobs:
+  test_job:
+    runs-on: ubuntu-22.04
+    env:
+      CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
+      CCACHE_NOHASHDIR: "true"
+      CCACHE_HARDLINK: "true"
+      CI: "false"
+    #   MODEL: ${{ inputs.phone == '小米10' && 'Mi10' || 'MI10PRO' }} 
+    steps:
+      - run: echo "🎉 该任务自动触发于 ${{ github.event_name }} 事件."
+      - run: echo "${{ inputs.m }}-${{ inputs.gki }}-${{ inputs.model }}"
+
+      - name: 初始化
+        run: |
+          sudo apt install repo python3 python-is-python3
+
+      - name: 拉取susfs仓库
+        run: |
+          git clone https://gitlab.com/simonpunk/susfs4ksu.git -b ${{ inputs.gki }} --depth=1 susfs   
+      - name: 下载内核源代码
+        run: |
+          mkdir work && cd work
+          repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b ${{ inputs.model }} -m ${{ inputs.m }} --depth=1
+          repo sync -j$(nproc --all)
+          rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
+          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
+          sed -i 's/check_defconfig//' kernel_platform/common/build.config.gki
+          sed -i 's/CONFIG_LTO_CLANG_FULL=y/CONFIG_LTO_CLANG_THIN=y/' "kernel_platform/common/arch/arm64/configs/gki_defconfig"
+          sed -i 's/CONFIG_LTO_CLANG_NONE=y/CONFIG_LTO_CLANG_THIN=y/' "kernel_platform/common/arch/arm64/configs/gki_defconfig"
+          sed -i 's/ -dirty$//' kernel_platform/common/scripts/setlocalversion
+          sed -i 's/ -dirty$//' kernel_platform/msm-kernel/scripts/setlocalversion
+
+
+      - name: 添加KSUN与Susfs
+        run: |
+          cd work/kernel_platform/common/
+          curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash -s next-susfs
+          cd ../../
+          cp ../susfs/kernel_patches/50_add_susfs_in_${{ inputs.gki }}.patch ./kernel_platform/common/
+          cp ../susfs4ksu/kernel_patches/fs/* ./kernel_platform/common/fs/
+          cp ../susfs4ksu/kernel_patches/include/linux/* ./kernel_platform/common/include/linux/
+          cd ./kernel_platform/common/
+          patch -p1 < 50_add_susfs_in_${{ inputs.gki }}.patch || true
+
+      - name: 开始编译
+        run: |
+          cd work && ./kernel_platform/oplus/build/oplus_build_kernel.sh pineapple gki
+          
+
+      - name: 上传boot.img
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.m }}-Image.zip
+          path: |
+            work/kernel_platform/out/msm-kernel-pineapple-gki/dist/Image
+            work/kernel_platform/out/msm-kernel-pineapple-gki/dist/Image.gz
+            work/kernel_platform/out/msm-kernel-pineapple-gki/dist/Image.lz4
+      - name: 上传boot.img
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.m }}-Image.zip
+          path: |
+            work/kernel_platform/out/msm-kernel-pineapple-gki/dist/boot.img
+            work/kernel_platform/out/msm-kernel-pineapple-gki/dist/boot-gz.img
+            work/kernel_platform/out/msm-kernel-pineapple-gki/dist/boot-lz4.img

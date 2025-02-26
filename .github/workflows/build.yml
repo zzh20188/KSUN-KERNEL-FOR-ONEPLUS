@@ -1,10 +1,10 @@
 name: 开始引用
 permissions:
-  contents: write  # Allow writing to repository contents (for pushing tags)
-  actions: write   # Allows triggering actions
+  contents: write
+  actions: write
 
 on:
-  workflow_dispatch:  # This allows this workflow to be called from another workflow
+  workflow_dispatch:
   
 jobs:
   build_kernel:
@@ -13,17 +13,23 @@ jobs:
         include:
         - manifest: "oneplus12_v.xml"
           gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
         - manifest: "oneplus_13r.xml"
           gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
         - manifest: "oneplus_ace3_pro_v.xml"
           gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
         - manifest: "oneplus_ace5.xml"
           gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
         - manifest: "oneplus_pad2_v.xml"
           gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
             
-    uses: ./.github/workflows/test.yml
+    uses: ./.github/workflows/run.yml
     with:
       m: ${{ matrix.manifest }}
       gki: ${{ matrix.gki }}
+      model: ${{ matrix.model }}
     secrets: inherit
