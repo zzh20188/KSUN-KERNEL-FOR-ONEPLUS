@@ -81,19 +81,19 @@ jobs:
           cd work && ./kernel_platform/oplus/build/oplus_build_kernel.sh pineapple gki
           
 
-      - name: 上传boot.img
+      - name: 上传Image镜像（需要手动替换到刷入包）
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.m }}-Image.zip
           path: |
-            work/kernel_platform/out/msm-kernel-pineapple-gki/dist/Image
-            work/kernel_platform/out/msm-kernel-pineapple-gki/dist/Image.gz
-            work/kernel_platform/out/msm-kernel-pineapple-gki/dist/Image.lz4
+            work/out/dist/Image
+            work/out/dist/Image.gz
+            work/out/dist/Image.lz4
       - name: 上传boot.img
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.m }}-Image.zip
+          name: ${{ inputs.m }}-boot.zip
           path: |
-            work/kernel_platform/out/msm-kernel-pineapple-gki/dist/boot.img
-            work/kernel_platform/out/msm-kernel-pineapple-gki/dist/boot-gz.img
-            work/kernel_platform/out/msm-kernel-pineapple-gki/dist/boot-lz4.img
+            work/out/dist/boot.img
+            work/out/dist/boot-gz.img
+            work/out/dist/boot-lz4.img
