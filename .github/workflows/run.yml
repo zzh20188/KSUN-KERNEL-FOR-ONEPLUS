@@ -59,18 +59,20 @@ jobs:
 
       - name: 开始编译
         run: |
+          ls
           cd work && ./kernel_platform/oplus/build/oplus_build_kernel.sh pineapple gki
-          find . -name "Image" -o -name "boot.img"
+          ls
+          find . -name "Image"
           
       - name: 整合资源
         run: |
           mkdir -p src
-          cp ./work/out/dist/Image ./src/
-          cp ./work/out/dist/Image.gz ./src/
-          cp ./work/out/dist/Image.lz4 ./src/
-          cp ./work/out/dist/boot.img ./src/
-          cp ./work/out/dist/boot-gz.img ./src/
-          cp ./work/out/dist/boot-lz4.img ./src/
+          cp work/out/dist/Image src/
+          cp work/out/dist/Image.gz src/
+          cp work/out/dist/Image.lz4 src/
+          cp work/out/dist/boot.img src/
+          cp work/out/dist/boot-gz.img src/
+          cp work/out/dist/boot-lz4.img src/
 
       - name: 上传镜像（Image需要手动替换到刷入包）
         uses: actions/upload-artifact@v4
