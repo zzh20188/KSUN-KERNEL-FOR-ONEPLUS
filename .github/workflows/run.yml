@@ -71,8 +71,8 @@ jobs:
           curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash -s next-susfs
           cd ../../
           cp ../susfs/kernel_patches/50_add_susfs_in_${{ inputs.gki }}.patch ./kernel_platform/common/
-          cp ../susfs4ksu/kernel_patches/fs/* ./kernel_platform/common/fs/
-          cp ../susfs4ksu/kernel_patches/include/linux/* ./kernel_platform/common/include/linux/
+          cp ../susfs/kernel_patches/fs/* ./kernel_platform/common/fs/
+          cp ../susfs/kernel_patches/include/linux/* ./kernel_platform/common/include/linux/
           cd ./kernel_platform/common/
           patch -p1 < 50_add_susfs_in_${{ inputs.gki }}.patch || true
 
