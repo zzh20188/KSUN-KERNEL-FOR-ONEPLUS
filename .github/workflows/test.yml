@@ -1,0 +1,39 @@
+name: 工作流例子
+run-name: ${{ github.actor }} 正在测试 GitHub Actions 🚀
+on:
+  workflow_dispatch:
+    inputs:
+      phone:
+        description: '选择手机型号：'
+        required: true
+        default: '小米10'
+        type: choice
+        options:
+          - 小米10
+          - 小米10pro
+      susfs:
+        description: '是否集成SUSFS'
+        required: true
+        type: boolean
+      version:
+        description: '自定义版本名（如perf-xxx）/可为空（则为n0kernel）'
+        required: false
+        type: string
+      m:
+        required: false
+        type: string
+      gki:
+        required: false
+        type: string  
+jobs:
+  test_job:
+    runs-on: ubuntu-22.04
+    env:
+      CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
+      CCACHE_NOHASHDIR: "true"
+      CCACHE_HARDLINK: "true"
+      CI: "false"
+      MODEL: ${{ inputs.phone == '小米10' && 'Mi10' || 'MI10PRO' }} 
+    steps:
+      - run: echo "🎉 该任务自动触发于 ${{ github.event_name }} 事件."
+      - run: echo "${{inputs.m}}-${{inputs.gki}}"
