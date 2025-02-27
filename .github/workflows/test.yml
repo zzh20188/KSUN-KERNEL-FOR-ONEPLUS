@@ -38,6 +38,7 @@ jobs:
       - name: 扫描目录
         run: |
           git clone https://github.com/zzh20188/KSUN-KERNEL-FOR-ONEPLUS --depth=1 local
+          git clone https://github.com/Kernel-SU/AnyKernel3 --depth=1 ak3
           ls local/
           ls local/patches/
           ls
