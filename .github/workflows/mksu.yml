@@ -76,12 +76,21 @@ jobs:
           cd ./kernel_platform/common/
           cd ./KernelSU
           patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
-          cp local/patches/mksu_susfs.patch .
-          patch -p1 < mksu_susfs.patch
-          cp local/patches/fix.patch .
-          patch -p1 < fix.patch
-          cd ../common
-          patch -p1 < 50_add_susfs_in_${{ inputs.gki }}.patch || true
+          
+
+      - name: 额外补丁
+        run: |
+            ls local/
+            ls local/patches/
+            ls
+            cp local/patches/mksu_susfs.patch ./kernel_platform/common/KernelSU/
+            cp local/patches/fix.patch ./kernel_platform/common/KernelSU/
+            cd ./kernel_platform/common/KernelSU/
+            patch -p1 < mksu_susfs.patch
+            patch -p1 < fix.patch
+            cd ..
+            patch -p1 < 50_add_susfs_in_${{ inputs.gki }}.patch || true
+            
       - name: 开始编译
         run: |
           cd work

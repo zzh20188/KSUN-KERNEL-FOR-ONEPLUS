@@ -55,12 +55,12 @@ jobs:
           repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b ${{ inputs.model }} -m ${{ inputs.m }} --depth=1
           repo sync -j$(nproc --all)
           rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
-          # rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
+          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
           # sed -i 's/check_defconfig//' kernel_platform/common/build.config.gki
           # sed -i 's/CONFIG_LTO_CLANG_FULL=y/CONFIG_LTO_CLANG_THIN=y/' "kernel_platform/common/arch/arm64/configs/gki_defconfig"
           # sed -i 's/CONFIG_LTO_CLANG_NONE=y/CONFIG_LTO_CLANG_THIN=y/' "kernel_platform/common/arch/arm64/configs/gki_defconfig"
-          # sed -i 's/ -dirty$//' kernel_platform/common/scripts/setlocalversion
-          # sed -i 's/ -dirty$//' kernel_platform/msm-kernel/scripts/setlocalversion
+          sed -i 's/ -dirty$//' kernel_platform/common/scripts/setlocalversion
+          sed -i 's/ -dirty$//' kernel_platform/msm-kernel/scripts/setlocalversion
 
       - name: 添加KSUN与Susfs
         run: |
