@@ -1,0 +1,106 @@
+name: 编译一加内核(mksu)
+run-name: ${{ github.actor }} 正在编译一加内核🚀
+permissions:
+  contents: write
+  actions: write
+on:
+  workflow_call:
+    inputs:
+      m:
+        required: false
+        type: string
+      gki:
+        required: false
+        type: string
+      model:
+        required: false
+        type: string     
+jobs:
+  test_job:
+    runs-on: ubuntu-22.04
+    env:
+      CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
+      CCACHE_NOHASHDIR: "true"
+      CCACHE_HARDLINK: "true"
+      CI: "false"
+    steps:
+      
+      - name: 设置交换内存
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 24576
+          temp-reserve-mb: 8192
+          swap-size-mb: 16384
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+
+      - name: 初始化
+        run: |
+          sudo apt install repo python3 python-is-python3
+
+      - name: 拉取susfs仓库
+        run: |
+          git clone https://gitlab.com/simonpunk/susfs4ksu.git -b ${{ inputs.gki }} --depth=1 susfs   
+
+      - name: 下载内核源代码
+        run: |
+          mkdir work && cd work
+          repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b ${{ inputs.model }} -m ${{ inputs.m }} --depth=1
+          repo sync -j$(nproc --all)
+          rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
+          # rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
+          # sed -i 's/check_defconfig//' kernel_platform/common/build.config.gki
+          # sed -i 's/CONFIG_LTO_CLANG_FULL=y/CONFIG_LTO_CLANG_THIN=y/' "kernel_platform/common/arch/arm64/configs/gki_defconfig"
+          # sed -i 's/CONFIG_LTO_CLANG_NONE=y/CONFIG_LTO_CLANG_THIN=y/' "kernel_platform/common/arch/arm64/configs/gki_defconfig"
+          # sed -i 's/ -dirty$//' kernel_platform/common/scripts/setlocalversion
+          # sed -i 's/ -dirty$//' kernel_platform/msm-kernel/scripts/setlocalversion
+
+      - name: 添加KSUN与Susfs
+        run: |
+          echo "1.进入common"
+          cd work/kernel_platform/common/
+          echo "2.安装MKSU"
+          curl -LSs "https://raw.githubusercontent.com/5ec1cff/KernelSU/main/kernel/setup.sh" | bash -s main
+          cd ../../
+          cp ../susfs/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./kernel_platform/common/KernelSU/
+          cp ../susfs/kernel_patches/50_add_susfs_in_${{ inputs.gki }}.patch ./kernel_platform/common/
+          cp ../susfs/kernel_patches/fs/* ./kernel_platform/common/fs/
+          cp ../susfs/kernel_patches/include/linux/* ./kernel_platform/common/include/linux/
+          cd ./kernel_platform/common/
+          cd ./KernelSU
+          patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
+          cp patches/mksu_susfs.patch .
+          patch -p1 < mksu_susfs.patch
+          cp patches/fix.patch .
+          patch -p1 < fix.patch
+          cd ../common
+          patch -p1 < 50_add_susfs_in_${{ inputs.gki }}.patch || true
+      - name: 开始编译
+        run: |
+          cd work
+          ./kernel_platform/oplus/build/oplus_build_kernel.sh pineapple gki
+          find . -name "Image" -o -name "boot.img"
+          ls
+          ls out/dist/
+          ls kernel_platform/out/msm-kernel-pineapple-gki/dist/
+          
+      - name: 整合资源
+        if: always()    
+        run: |
+          mkdir -p src
+          cp work/out/dist/Image src/
+          cp work/out/dist/Image.gz src/
+          cp work/out/dist/Image.lz4 src/
+          cp work/out/dist/boot.img src/
+          cp work/out/dist/boot-gz.img src/
+          cp work/out/dist/boot-lz4.img src/
+
+      - name: 上传镜像（Image需要手动替换到刷入包）
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.m }}-Image_boot
+          path: |
+            src/*
+

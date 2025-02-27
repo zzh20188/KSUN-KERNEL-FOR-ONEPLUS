@@ -1,0 +1,35 @@
+name: 编译mksu
+permissions:
+  contents: write
+  actions: write
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  build_kernel:
+    strategy:
+      matrix:
+        include:
+        - manifest: "oneplus12_v.xml"
+          gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
+        - manifest: "oneplus_13r.xml"
+          gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
+        - manifest: "oneplus_ace3_pro_v.xml"
+          gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
+        - manifest: "oneplus_ace5.xml"
+          gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
+        - manifest: "oneplus_pad2_v.xml"
+          gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
+            
+    uses: ./.github/workflows/mksu.yml
+    with:
+      m: ${{ matrix.manifest }}
+      gki: ${{ matrix.gki }}
+      model: ${{ matrix.model }}
+    secrets: inherit
