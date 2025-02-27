@@ -40,10 +40,10 @@ jobs:
         run: |
           sudo apt install repo python3 python-is-python3
 
-      - name: 拉取susfs仓库
+      - name: 拉取仓库
         run: |
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b ${{ inputs.gki }} --depth=1 susfs   
-
+          git clone https://github.com/zzh20188/KSUN-KERNEL-FOR-ONEPLUS --depth=1 local
       - name: 下载内核源代码
         run: |
           mkdir work && cd work
@@ -71,9 +71,9 @@ jobs:
           cd ./kernel_platform/common/
           cd ./KernelSU
           patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
-          cp patches/mksu_susfs.patch .
+          cp local/patches/mksu_susfs.patch .
           patch -p1 < mksu_susfs.patch
-          cp patches/fix.patch .
+          cp local/patches/fix.patch .
           patch -p1 < fix.patch
           cd ../common
           patch -p1 < 50_add_susfs_in_${{ inputs.gki }}.patch || true
