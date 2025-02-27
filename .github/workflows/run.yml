@@ -76,6 +76,7 @@ jobs:
           ls
           ls out/dist/
           ls kernel_platform/out/msm-kernel-pineapple-gki/dist/
+          
       - name: 整合资源
         if: always()    
         run: |
