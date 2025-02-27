@@ -38,7 +38,12 @@ jobs:
 
       - name: 初始化
         run: |
-          sudo apt install repo python3 python-is-python3
+          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/repo
+          chmod a+x ~/repo
+          sudo mv ~/repo /usr/local/bin/repo
+          sudo apt update && sudo apt upgrade -y
+          sudo apt install curl git python3 python3-pip -y
+          pip3 install requests_toolbelt requests
 
       - name: 拉取susfs仓库
         run: |
@@ -76,7 +81,7 @@ jobs:
           ls
           ls out/dist/
           ls kernel_platform/out/msm-kernel-pineapple-gki/dist/
-          
+
       - name: 整合资源
         if: always()    
         run: |
