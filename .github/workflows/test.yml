@@ -48,15 +48,15 @@ jobs:
           #正常Image
           mkdir -p src
           cd ak3
-          mv work/out/dist/Image .
+          mv $GITHUB_WORKSPACE/work/out/dist/Image .
           zip -r "src/op12.zip" .
           rm Image
           #gzip压缩版
-          mv work/out/dist/Image.gz .
+          mv $GITHUB_WORKSPACE/work/out/dist/Image.gz .
           zip -r "src/op12-gz.zip"  .
           rm Image.gz
           #lz4压缩版
-          mv work/out/dist/Image.lz4 .
+          mv $GITHUB_WORKSPACE/work/out/dist/Image.lz4 .
           zip -r "src/op12-lz4.zip"  .
           rm Image.lz4
           #正常boot
