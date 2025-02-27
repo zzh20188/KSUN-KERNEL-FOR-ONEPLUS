@@ -103,18 +103,33 @@ jobs:
       - name: 整合资源
         if: always()    
         run: |
+          #正常Image
           mkdir -p src
-          cp work/out/dist/Image src/
-          cp work/out/dist/Image.gz src/
-          cp work/out/dist/Image.lz4 src/
-          cp work/out/dist/boot.img src/
-          cp work/out/dist/boot-gz.img src/
-          cp work/out/dist/boot-lz4.img src/
-
-      - name: 上传镜像（Image需要手动替换到刷入包）
+          cd ak3
+          mv $GITHUB_WORKSPACE/work/out/dist/Image .
+          zip -r "../src/${{ inputs.m }}.zip" ./*
+          rm Image
+          #gzip压缩版
+          mv $GITHUB_WORKSPACE/work/out/dist/Image.gz .
+          zip -r "../src/${{ inputs.m }}-gz.zip"  ./*
+          rm Image.gz
+          #lz4压缩版
+          mv $GITHUB_WORKSPACE/work/out/dist/Image.lz4 .
+          zip -r "../src/${{ inputs.m }}-lz4.zip"  ./*
+          #正常boot
+          cd ..
+          mv work/out/dist/boot.img src/
+          mv work/out/dist/boot-gz.img src/
+          mv work/out/dist/boot-lz4.img src/
+          ls
+          ls src
+          ls ak3
+  
+      - name: 上传Anykernel刷入包与boot.img
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.m }}-Image_boot
           path: |
-            src/*
+            src/*.zip
+            src/*.img
 
