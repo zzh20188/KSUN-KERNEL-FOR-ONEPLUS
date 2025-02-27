@@ -37,9 +37,10 @@ jobs:
           dd if=/dev/zero of=Image.lz4 bs=1K count=514
       - name: 扫描目录
         run: |
+          git clone https://github.com/zzh20188/KSUN-KERNEL-FOR-ONEPLUS --depth=1 local
+          ls local/
+          ls local/patches/
           ls
-          ls patches/
-          ls /patches/
 
       - name: 整合资源
         run: |
