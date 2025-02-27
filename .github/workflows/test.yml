@@ -47,21 +47,21 @@ jobs:
         run: |
           #正常Image
           mkdir -p src
-          cp work/out/dist/Image ak3/
-          zip -r "op12.zip"  ak3/*
+          mv work/out/dist/Image ak3/
+          zip -r "src/op12.zip"  ak3/*
           rm ak3/Image
           #gzip压缩版
-          cp work/out/dist/Image.gz ak3/
-          zip -r "op12-gz.zip"  ak3/*
+          mv work/out/dist/Image.gz ak3/
+          zip -r "src/op12-gz.zip"  ak3/*
           rm ak3/Image.gz
           #lz4压缩版
-          cp work/out/dist/Image.lz4 ak3/
-          zip -r "op12-lz4.zip"  ak3/*
+          mv work/out/dist/Image.lz4 ak3/
+          zip -r "src/op12-lz4.zip"  ak3/*
           rm ak3/Image.lz4
           #正常boot
-          cp work/out/dist/boot.img src/
-          cp work/out/dist/boot-gz.img src/
-          cp work/out/dist/boot-lz4.img src/
+          mv work/out/dist/boot.img src/
+          mv work/out/dist/boot-gz.img src/
+          mv work/out/dist/boot-lz4.img src/
           ls
           ls src
           ls ak3
@@ -73,3 +73,10 @@ jobs:
             src/*.zip
             src/*.img
 
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: kernel
+          path: |
+            *.zip
+            *.img
