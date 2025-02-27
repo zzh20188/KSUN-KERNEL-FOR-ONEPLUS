@@ -49,16 +49,15 @@ jobs:
           mkdir -p src
           cd ak3
           mv $GITHUB_WORKSPACE/work/out/dist/Image .
-          zip -r "src/op12.zip" .
+          zip -r "src/op12.zip" ./*
           rm Image
           #gzip压缩版
           mv $GITHUB_WORKSPACE/work/out/dist/Image.gz .
-          zip -r "src/op12-gz.zip"  .
+          zip -r "src/op12-gz.zip"  ./*
           rm Image.gz
           #lz4压缩版
           mv $GITHUB_WORKSPACE/work/out/dist/Image.lz4 .
-          zip -r "src/op12-lz4.zip"  .
-          rm Image.lz4
+          zip -r "src/op12-lz4.zip"  ./*
           #正常boot
           cd ..
           mv work/out/dist/boot.img src/
