@@ -44,13 +44,23 @@ jobs:
 
       - name: 整合资源
         run: |
+          #正常Image
           mkdir -p src
-          cp ./work/out/dist/Image ./src/
-          cp ./work/out/dist/Image.gz ./src/
-          cp ./work/out/dist/Image.lz4 ./src/
-          cp ./work/out/dist/boot.img ./src/
-          cp ./work/out/dist/boot-gz.img ./src/
-          cp ./work/out/dist/boot-lz4.img ./src/
+          cp work/out/dist/Image ak3/
+          zip -r "${{ inputs.m }}.zip"  ak3/*
+          rm ak3/Image
+          #gzip压缩版
+          cp work/out/dist/Image.gz ak3/
+          zip -r "${{ inputs.m }}-gz.zip"  ak3/*
+          rm ak3/Image.gz
+          #lz4压缩版
+          cp work/out/dist/Image.lz4 ak3/
+          zip -r "${{ inputs.m }}-lz4.zip"  ak3/*
+          rm ak3/Image.lz4
+          #正常boot
+          cp work/out/dist/boot.img src/
+          cp work/out/dist/boot-gz.img src/
+          cp work/out/dist/boot-lz4.img src/
   
       - name: 上传镜像（Image需要手动替换到刷入包）
         uses: actions/upload-artifact@v4

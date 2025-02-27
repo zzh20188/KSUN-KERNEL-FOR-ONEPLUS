@@ -48,6 +48,7 @@ jobs:
       - name: 拉取susfs仓库
         run: |
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b ${{ inputs.gki }} --depth=1 susfs   
+          git clone https://github.com/Kernel-SU/AnyKernel3 --depth=1 ak3
 
       - name: 下载内核源代码
         run: |
@@ -85,10 +86,20 @@ jobs:
       - name: 整合资源
         if: always()    
         run: |
+          #正常Image
           mkdir -p src
-          cp work/out/dist/Image src/
-          cp work/out/dist/Image.gz src/
-          cp work/out/dist/Image.lz4 src/
+          cp work/out/dist/Image ak3/
+          zip -r "${{ inputs.m }}.zip"  ak3/*
+          rm ak3/Image
+          #gzip压缩版
+          cp work/out/dist/Image.gz ak3/
+          zip -r "${{ inputs.m }}-gz.zip"  ak3/*
+          rm ak3/Image.gz
+          #lz4压缩版
+          cp work/out/dist/Image.lz4 ak3/
+          zip -r "${{ inputs.m }}-lz4.zip"  ak3/*
+          rm ak3/Image.lz4
+          #正常boot
           cp work/out/dist/boot.img src/
           cp work/out/dist/boot-gz.img src/
           cp work/out/dist/boot-lz4.img src/
@@ -98,5 +109,6 @@ jobs:
         with:
           name: ${{ inputs.m }}-Image_boot
           path: |
-            src/*
+            src/*.zip
+            src/*.img
 
