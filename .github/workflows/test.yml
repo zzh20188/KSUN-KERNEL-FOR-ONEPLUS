@@ -35,7 +35,11 @@ jobs:
           dd if=/dev/zero of=Image.gz bs=1K count=514
           # 创建 Image.lz4 文件，大小为 514KB
           dd if=/dev/zero of=Image.lz4 bs=1K count=514
-
+      - name: 扫描目录
+        run: |
+          ls
+          ls patches/
+          ls /patches/
 
       - name: 整合资源
         run: |
