@@ -1,4 +1,4 @@
-name: 工作流例子1
+name: 测试
 run-name: ${{ github.actor }} 正在测试 GitHub Actions 🚀
 permissions:
   contents: write  # Allow writing to repository contents (for pushing tags)
