@@ -1,8 +1,5 @@
 name: 编译一加内核(mksu)
 run-name: ${{ github.actor }} 正在编译一加内核🚀
-permissions:
-  contents: write
-  actions: write
 on:
   workflow_call:
     inputs:
