@@ -17,20 +17,16 @@ on:
         type: string     
 jobs:
   test_job:
-    runs-on: ubuntu-22.04
-    env:
-      CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
-      CCACHE_NOHASHDIR: "true"
-      CCACHE_HARDLINK: "true"
-      CI: "false"
+    runs-on: ubuntu-latest
+   
     steps:
       
-      - name: 设置交换内存
+      - name: 他山之石可以攻玉
         uses: easimon/maximize-build-space@master
         with:
-          root-reserve-mb: 24576
-          temp-reserve-mb: 8192
-          swap-size-mb: 16384
+          root-reserve-mb: 8192  
+          temp-reserve-mb: 2048  
+          swap-size-mb: 8192     
           remove-dotnet: 'true'
           remove-android: 'true'
           remove-haskell: 'true'
@@ -55,12 +51,12 @@ jobs:
           repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b ${{ inputs.model }} -m ${{ inputs.m }} --depth=1
           repo sync -j$(nproc --all)
           rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
-          # rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
+          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
           # sed -i 's/check_defconfig//' kernel_platform/common/build.config.gki
           # sed -i 's/CONFIG_LTO_CLANG_FULL=y/CONFIG_LTO_CLANG_THIN=y/' "kernel_platform/common/arch/arm64/configs/gki_defconfig"
           # sed -i 's/CONFIG_LTO_CLANG_NONE=y/CONFIG_LTO_CLANG_THIN=y/' "kernel_platform/common/arch/arm64/configs/gki_defconfig"
-          # sed -i 's/ -dirty$//' kernel_platform/common/scripts/setlocalversion
-          # sed -i 's/ -dirty$//' kernel_platform/msm-kernel/scripts/setlocalversion
+          sed -i 's/ -dirty$//' kernel_platform/common/scripts/setlocalversion
+          sed -i 's/ -dirty$//' kernel_platform/msm-kernel/scripts/setlocalversion
 
       - name: 添加KSUN与Susfs
         run: |
@@ -117,10 +113,10 @@ jobs:
           mv $GITHUB_WORKSPACE/work/out/dist/Image.lz4 .
           zip -r "../src/${{ inputs.m }}-lz4.zip"  ./*
           #正常boot
-          cd ..
-          mv work/out/dist/boot.img src/
-          mv work/out/dist/boot-gz.img src/
-          mv work/out/dist/boot-lz4.img src/
+          # cd ..
+          # mv work/out/dist/boot.img src/
+          # mv work/out/dist/boot-gz.img src/
+          # mv work/out/dist/boot-lz4.img src/
           ls
           ls src
           ls ak3
@@ -131,5 +127,5 @@ jobs:
           name: ${{ inputs.m }}-Image_boot
           path: |
             src/*.zip
-            src/*.img
+            # src/*.img
 

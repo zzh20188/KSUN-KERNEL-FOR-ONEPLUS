@@ -18,14 +18,10 @@ on:
 jobs:
   test_job:
     runs-on: ubuntu-latest
-    env:
-      CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
-      CCACHE_NOHASHDIR: "true"
-      CCACHE_HARDLINK: "true"
-      CI: "false"
+    
     steps:
       
-      - name: 设置交换内存
+      - name: 引用其他action增加储存空间
         uses: easimon/maximize-build-space@master
         with:
           root-reserve-mb: 8192  
