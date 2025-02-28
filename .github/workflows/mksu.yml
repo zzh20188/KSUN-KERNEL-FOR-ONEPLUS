@@ -114,9 +114,7 @@ jobs:
           # mv work/out/dist/boot.img src/
           # mv work/out/dist/boot-gz.img src/
           # mv work/out/dist/boot-lz4.img src/
-          ls
-          ls src
-          ls ak3
+
   
       - name: 上传Anykernel刷入包与boot.img
         uses: actions/upload-artifact@v4
