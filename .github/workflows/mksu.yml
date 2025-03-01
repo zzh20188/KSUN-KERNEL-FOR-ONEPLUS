@@ -42,6 +42,7 @@ jobs:
         run: |
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b ${{ inputs.gki }} --depth=1 susfs   
           git clone https://github.com/zzh20188/KSUN-KERNEL-FOR-ONEPLUS --depth=1 local
+          git clone https://github.com/Kernel-SU/AnyKernel3 --depth=1 ak3
       - name: 下载内核源代码
         run: |
           mkdir work && cd work
