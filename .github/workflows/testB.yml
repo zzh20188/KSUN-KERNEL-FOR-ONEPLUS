@@ -49,6 +49,6 @@ jobs:
       m: ${{ matrix.manifest }}
       gki: ${{ matrix.gki }}
       model: ${{ matrix.model }}
-      ksu: ${{ inputs.ksuV }} 
-      ver: ${{ inputs.VER }} 
+    #   ksu: ${{ inputs.ksuV }} 
+    #   ver: ${{ inputs.VER }} 
     secrets: inherit
