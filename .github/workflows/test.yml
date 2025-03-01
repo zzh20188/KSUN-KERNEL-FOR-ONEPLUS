@@ -4,8 +4,23 @@ permissions:
   contents: write  # Allow writing to repository contents (for pushing tags)
   actions: write   # Allows triggering actions
 on:
-  workflow_dispatch:
- 
+  workflow_call:
+  inputs:
+        m:
+          required: false
+          type: string
+        gki:
+          required: false
+          type: string
+        model:
+          required: false
+          type: string
+        ksu:
+          required: false
+          type: string
+        ver:
+          required: false
+          type: string    
 jobs:
   test_job:
     runs-on: ubuntu-22.04
@@ -17,7 +32,9 @@ jobs:
     #   MODEL: ${{ inputs.phone == '小米10' && 'Mi10' || 'MI10PRO' }} 
     steps:
       - run: echo "🎉 该任务自动触发于 ${{ github.event_name }} 事件."
-      - run: echo "${{ inputs.m }}-${{ inputs.gki }}-${{ inputs.model }}"
+      - run: echo "${{ inputs.m }}-${{ inputs.gki }}-${{ inputs.model }}-${{ inputs.ksu }}-${{ inputs.ver }}"
+      - name: 创建几个文件用于测试
+        run: |
 
       - name: 创建几个文件用于测试
         run: |

@@ -1,0 +1,49 @@
+name: 编译
+permissions:
+  contents: write
+  actions: write
+
+on:
+  workflow_dispatch:
+  inputs:
+      ksuV:
+        description: '选择你要编译的KSU版本'
+        required: true
+        default: 'MagicMount-KERNERSU'
+        type: choice
+        options:
+          - KERNELSU-NEXT
+          - MagicMount-KERNERSU
+      VER:
+        description: '安卓内核的版本[6.1.xx后面的内容]（可留空）'
+        required: true
+        type: string
+jobs:
+  build_kernel:
+    strategy:
+      matrix:
+        include:
+        - manifest: "oneplus12_v.xml"
+          gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
+        - manifest: "oneplus_13r.xml"
+          gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
+        - manifest: "oneplus_ace3_pro_v.xml"
+          gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
+        - manifest: "oneplus_ace5.xml"
+          gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
+        - manifest: "oneplus_pad2_v.xml"
+          gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
+            
+    uses: ./.github/workflows/test.yml
+    with:
+      m: ${{ matrix.manifest }}
+      gki: ${{ matrix.gki }}
+      model: ${{ matrix.model }}
+      ksu: ${{ inputs.ksuV }} 
+      ver: ${{ inputs.VER }} 
+    secrets: inherit
