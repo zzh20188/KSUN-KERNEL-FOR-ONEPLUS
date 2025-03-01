@@ -16,7 +16,7 @@ on:
             - MagicMount-KERNERSU
         VER:
             description: '如6.1.66[输入框中的内容]（可留空）'
-            required: true
+            required: false
             type: string
 jobs:
   build_kernel:
@@ -28,6 +28,8 @@ jobs:
           model: "oneplus/sm8650"
     if: ${{ inputs.ksuV == 'KERNELSU-NEXT' }}        
     uses: ./.github/workflows/test.yml
+    if: ${{ inputs.ksuV == 'MagicMount-KERNERSU' }}        
+    uses: ./.github/workflows/run.yml
     with:
       m: ${{ matrix.manifest }}
       gki: ${{ matrix.gki }}
