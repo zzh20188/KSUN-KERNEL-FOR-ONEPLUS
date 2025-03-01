@@ -19,7 +19,7 @@ on:
             required: false
             type: string
 jobs:
-  build_kernel:
+  build_kernel_ksun:
     strategy:
       matrix:
         include:
@@ -28,7 +28,21 @@ jobs:
           model: "oneplus/sm8650"
     if: ${{ inputs.ksuV == 'KERNELSU-NEXT' }}        
     uses: ./.github/workflows/test.yml
-    
+    with:
+      m: ${{ matrix.manifest }}
+      gki: ${{ matrix.gki }}
+      model: ${{ matrix.model }}
+      ksu: ${{ inputs.ksuV }} 
+      ver: ${{ inputs.VER }} 
+    secrets: inherit
+
+  build_kernel_mksu:
+    strategy:
+      matrix:
+        include:
+        - manifest: "oneplus12_v.xml"
+          gki: "gki-android14-6.1"
+          model: "oneplus/sm8650"
     if: ${{ inputs.ksuV == 'MKSU' }}        
     uses: ./.github/workflows/run.yml
     with:
