@@ -13,7 +13,7 @@ on:
             type: choice
             options:
             - KERNELSU-NEXT
-            - MagicMount-KERNERSU
+            - MKSU
         VER:
             description: '如6.1.66[输入框中的内容]（可留空）'
             required: false
@@ -28,7 +28,7 @@ jobs:
           model: "oneplus/sm8650"
     if: ${{ inputs.ksuV == 'KERNELSU-NEXT' }}        
     uses: ./.github/workflows/test.yml
-    if: ${{ inputs.ksuV == 'MagicMount-KERNERSU' }}        
+    if: ${{ inputs.ksuV == 'MKSU' }}        
     uses: ./.github/workflows/run.yml
     with:
       m: ${{ matrix.manifest }}
