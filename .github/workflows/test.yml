@@ -5,22 +5,22 @@ permissions:
   actions: write   # Allows triggering actions
 on:
   workflow_call:
-  inputs:
-        m:
-          required: false
-          type: string
-        gki:
-          required: false
-          type: string
-        model:
-          required: false
-          type: string
-        ksu:
-          required: false
-          type: string
-        ver:
-          required: false
-          type: string    
+    inputs:
+          m:
+            required: false
+            type: string
+          gki:
+            required: false
+            type: string
+          model:
+            required: false
+            type: string
+          ksu:
+            required: false
+            type: string
+          ver:
+            required: false
+            type: string    
 jobs:
   test_job:
     runs-on: ubuntu-22.04

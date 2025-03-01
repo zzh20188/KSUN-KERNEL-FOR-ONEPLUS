@@ -1,23 +1,23 @@
-name: 测试一键
+name: 测试一键编译
 permissions:
   contents: write
   actions: write
 
 on:
   workflow_dispatch:
-  inputs:
-      ksuV:
-        description: '选择你要编译的KSU版本'
-        required: true
-        default: 'MagicMount-KERNERSU'
-        type: choice
-        options:
-          - KERNELSU-NEXT
-          - MagicMount-KERNERSU
-      VER:
-        description: '安卓内核的版本[6.1.xx后面的内容]（可留空）'
-        required: true
-        type: string
+    inputs:
+        ksuV:
+            description: '选择你要编译的KSU版本'
+            required: true
+            default: 'MagicMount-KERNERSU'
+            type: choice
+            options:
+            - KERNELSU-NEXT
+            - MagicMount-KERNERSU
+        VER:
+            description: '安卓内核的版本[6.1.xx后面的内容]（可留空）'
+            required: true
+            type: string
 jobs:
   build_kernel:
     strategy:
