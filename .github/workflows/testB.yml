@@ -9,7 +9,7 @@ on:
         ksuV:
             description: '选择你要编译的KSU版本'
             required: true
-            default: 'MagicMount-KERNERSU'
+            default: 'KERNELSU-NEXT'
             type: choice
             options:
             - KERNELSU-NEXT
