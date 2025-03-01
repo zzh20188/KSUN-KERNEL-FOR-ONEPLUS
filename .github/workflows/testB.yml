@@ -28,6 +28,7 @@ jobs:
           model: "oneplus/sm8650"
     if: ${{ inputs.ksuV == 'KERNELSU-NEXT' }}        
     uses: ./.github/workflows/test.yml
+    
     if: ${{ inputs.ksuV == 'MKSU' }}        
     uses: ./.github/workflows/run.yml
     with:
