@@ -15,7 +15,7 @@ on:
             - KERNELSU-NEXT
             - MagicMount-KERNERSU
         VER:
-            description: '安卓内核的版本[6.1.xx后面的内容]（可留空）'
+            description: '如6.1.66[输入框中的内容]（可留空）'
             required: true
             type: string
 jobs:
@@ -26,19 +26,7 @@ jobs:
         - manifest: "oneplus12_v.xml"
           gki: "gki-android14-6.1"
           model: "oneplus/sm8650"
-        - manifest: "oneplus_13r.xml"
-          gki: "gki-android14-6.1"
-          model: "oneplus/sm8650"
-        - manifest: "oneplus_ace3_pro_v.xml"
-          gki: "gki-android14-6.1"
-          model: "oneplus/sm8650"
-        - manifest: "oneplus_ace5.xml"
-          gki: "gki-android14-6.1"
-          model: "oneplus/sm8650"
-        - manifest: "oneplus_pad2_v.xml"
-          gki: "gki-android14-6.1"
-          model: "oneplus/sm8650"
-            
+    if: ${{ inputs.ksuV == 'KERNELSU-NEXT' }}        
     uses: ./.github/workflows/test.yml
     with:
       m: ${{ matrix.manifest }}
