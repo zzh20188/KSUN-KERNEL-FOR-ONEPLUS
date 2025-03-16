@@ -24,7 +24,7 @@ jobs:
       - name: 引用其他action增加储存空间
         uses: easimon/maximize-build-space@master
         with:
-          root-reserve-mb: 8192  
+          root-reserve-mb: 2048
           temp-reserve-mb: 2048  
           swap-size-mb: 8192     
           remove-dotnet: 'true'
@@ -53,7 +53,7 @@ jobs:
           repo sync -j$(nproc --all)
           rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
           rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
-          sed -i 's/check_defconfig//' kernel_platform/common/build.config.gki
+          # sed -i 's/check_defconfig//' kernel_platform/common/build.config.gki
           sed -i 's/CONFIG_LTO_CLANG_FULL=y/CONFIG_LTO_CLANG_THIN=y/' "kernel_platform/common/arch/arm64/configs/gki_defconfig"
           sed -i 's/CONFIG_LTO_CLANG_NONE=y/CONFIG_LTO_CLANG_THIN=y/' "kernel_platform/common/arch/arm64/configs/gki_defconfig"
           sed -i 's/ -dirty$//' kernel_platform/common/scripts/setlocalversion

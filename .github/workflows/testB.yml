@@ -44,7 +44,7 @@ jobs:
           gki: "gki-android14-6.1"
           model: "oneplus/sm8650"
     if: ${{ inputs.ksuV == 'MKSU' }}        
-    uses: ./.github/workflows/run.yml
+    uses: ./.github/workflows/mksu.yml
     with:
       m: ${{ matrix.manifest }}
       gki: ${{ matrix.gki }}
