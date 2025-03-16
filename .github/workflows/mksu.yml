@@ -50,7 +50,7 @@ jobs:
           repo sync -j$(nproc --all)
           rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
           rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
-          # sed -i 's/check_defconfig//' kernel_platform/common/build.config.gki
+          sed -i 's/check_defconfig//' kernel_platform/common/build.config.gki
           sed -i 's/CONFIG_LTO_CLANG_FULL=y/CONFIG_LTO_CLANG_THIN=y/' "kernel_platform/common/arch/arm64/configs/gki_defconfig"
           sed -i 's/CONFIG_LTO_CLANG_NONE=y/CONFIG_LTO_CLANG_THIN=y/' "kernel_platform/common/arch/arm64/configs/gki_defconfig"
           sed -i 's/ -dirty$//' kernel_platform/common/scripts/setlocalversion
@@ -110,24 +110,26 @@ jobs:
           ./kernel_platform/oplus/build/oplus_build_kernel.sh pineapple gki
           find . -name "Image" -o -name "boot.img"
           ls
-          ls out/dist/
+          # ls out/dist/
+          ls kernel_platform/
+          ls kernel_platform/out/
+          ls kernel_platform/out/msm-kernel-pineapple-gki/
           ls kernel_platform/out/msm-kernel-pineapple-gki/dist/
-          
       - name: 整合资源
         if: always()    
         run: |
           #正常Image
           mkdir -p src
           cd ak3
-          mv $GITHUB_WORKSPACE/work/out/dist/Image .
+          mv $GITHUB_WORKSPACE/work/kernel_platform/out/msm-kernel-pineapple-gki/dist/Image .
           zip -r "../src/${{ inputs.m }}.zip" ./*
           rm Image
           #gzip压缩版
-          mv $GITHUB_WORKSPACE/work/out/dist/Image.gz .
+          mv $GITHUB_WORKSPACE/work/kernel_platform/out/msm-kernel-pineapple-gki/dist/Image.gz .
           zip -r "../src/${{ inputs.m }}-gz.zip"  ./*
           rm Image.gz
           #lz4压缩版
-          mv $GITHUB_WORKSPACE/work/out/dist/Image.lz4 .
+          mv $GITHUB_WORKSPACE/work/kernel_platform/out/msm-kernel-pineapple-gki/dist/Image.lz4 .
           zip -r "../src/${{ inputs.m }}-lz4.zip"  ./*
           #正常boot
           # cd ..
