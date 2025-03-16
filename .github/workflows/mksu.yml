@@ -21,9 +21,9 @@ jobs:
       - name: 他山之石可以攻玉
         uses: easimon/maximize-build-space@master
         with:
-          root-reserve-mb: 12192  
-          temp-reserve-mb: 4048  
-          swap-size-mb: 14192     
+          root-reserve-mb: 8192
+          temp-reserve-mb: 2048  
+          swap-size-mb: 8192     
           remove-dotnet: 'true'
           remove-android: 'true'
           remove-haskell: 'true'
